@@ -1,0 +1,14 @@
+{
+  "buildCommand": "npm --prefix anivexa-api install && npm run build",
+  "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index.js" },
+    { "source": "/anivexa/(.*)", "destination": "/api/index.js" },
+    { "source": "/img-proxy", "destination": "/api/index.js" },
+    { "source": "/hls-proxy", "destination": "/api/index.js" },
+    { "source": "/trailer/(.*)", "destination": "/api/index.js" },
+    { "source": "/refresh", "destination": "/api/index.js" },
+    { "source": "/health", "destination": "/api/index.js" },
+    { "source": "/((?!assets/|.*\\..*).*)", "destination": "/index.html" }
+  ]
+}

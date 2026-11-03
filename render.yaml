@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: kotatsu
+    runtime: docker
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "7860"
+      - key: CACHE_ENABLED
+        value: "true"

@@ -1,0 +1,17 @@
+node_modules/
+anivexa-api/node_modules/
+anivexa-api/core/.cache/
+dist/
+hf-deploy/
+.env
+.env.*
+!.env.example
+scratch/
+server/data/*.db*
+server/data/trailers/*.mp4
+server/data/trailers/*.tmp.mp4
+.DS_Store
+*.log
+
+*.db
+cyberpunk-anilist-banner.jpg

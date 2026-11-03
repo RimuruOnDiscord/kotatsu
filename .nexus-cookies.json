@@ -1,0 +1,89 @@
+{
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36",
+  "fingerprint": "1734c53a-2ee2-40c6-b022-c019edfe9757:da9cf4ea-1d71-48b7-98ac-81579702a2af",
+  "cookies": [
+    {
+      "name": "_ga_0HE5HEW6ZX",
+      "value": "GS2.1.s1793189334$o1$g0$t1793189334$j60$l0$h0",
+      "domain": ".anime.nexus",
+      "path": "/",
+      "expires": 1827749334.37966,
+      "size": 59,
+      "httpOnly": false,
+      "secure": false,
+      "session": false,
+      "priority": "Medium",
+      "sourceScheme": "Secure"
+    },
+    {
+      "name": "cf_clearance",
+      "value": "pzRtJk_SU9GVfFhlsVbtJwKrQCFpGedSHzf0QmWGp6o-1793189334-1.2.1.1-1izC.73WmsvWWc.FeMHg6MKuAIH8tktlkKBm977FzE6k3bnChdRbHHU.SnaorAKC8eWfazo3CzQJNI8QflxoRUC91O4PUb1Lq9xZ1NjHS1LCUdcZ9aE7kl4RjquHowc7eukdP0SrnUVk00RG34tyqwh5P0fJCOoKp_ezxNzYMGJmkaq3nEfWhi9YIXBSK2unZGq3zjL7eL1BMwCwlp_3h9DDnrnJW5NQjy4DWGa2EobssePLaamCaQTzxhNSMr0PGAE7CPIIaGGwZdcMm9UvkEMWLLFfGZQrtmkkBQq_WRzoZdCg6IjvizaxEhGGhs7Z8mcx4dHZC3OdfoaipY1eulkCtKc0oKpP65K9Xb6UpahbkwdCzO1_ate5wiejaA7Syz5jBefV.sRJBTm4cPyM.UywYawc3SR3Ditepspq7UM",
+      "domain": ".anime.nexus",
+      "path": "/",
+      "expires": 1824725334.274816,
+      "size": 502,
+      "httpOnly": true,
+      "secure": true,
+      "session": false,
+      "sameSite": "None",
+      "priority": "Medium",
+      "sourceScheme": "Secure",
+      "partitionKey": "https://anime.nexus"
+    },
+    {
+      "name": "i18next",
+      "value": "en",
+      "domain": "anime.nexus",
+      "path": "/",
+      "expires": -1,
+      "size": 9,
+      "httpOnly": false,
+      "secure": false,
+      "session": true,
+      "sameSite": "Strict",
+      "priority": "Medium",
+      "sourceScheme": "Secure"
+    },
+    {
+      "name": "config",
+      "value": "{%22theme%22:%22zinc%22%2C%22sidebar%22:{%22collapsed%22:true}}",
+      "domain": "anime.nexus",
+      "path": "/",
+      "expires": 1824725334,
+      "size": 69,
+      "httpOnly": false,
+      "secure": true,
+      "session": false,
+      "sameSite": "Lax",
+      "priority": "Medium",
+      "sourceScheme": "Secure"
+    },
+    {
+      "name": "_ga",
+      "value": "GA1.1.510178543.1793189334",
+      "domain": ".anime.nexus",
+      "path": "/",
+      "expires": 1827749334.379998,
+      "size": 29,
+      "httpOnly": false,
+      "secure": false,
+      "session": false,
+      "priority": "Medium",
+      "sourceScheme": "Secure"
+    },
+    {
+      "name": "anime_nexus_session",
+      "value": "eyJpdiI6IkZLa1Jsa2RrQUxVdHErVTUwMkpzUWc9PSIsInZhbHVlIjoiUmkyK2F3bktVY2R4ZE5RbG5rN2JISFF2TVl6RmQ5QXkvc0ZTeGhhSlZpNDFjQURoNmNRR243SFdYc1Rvako5K2VpR2ZuT21jSmdTNWRZOVNyR0xNd1lPQURQY3JJRkcyUlluR1JidWU1bEtTZm9FMEk2dm9vMU5qVmQ4VmFtRmoiLCJtYWMiOiJhMGRiM2M4Mjg0M2QwM2Q0NTU3NGRiM2Q4MzczZDUzMjc5MjQ1NDM4NGJjYjc5MGZlMjcxYTk5YWVlZTI5MzdhIiwidGFnIjoiIn0%3D",
+      "domain": ".anime.nexus",
+      "path": "/",
+      "expires": 1793196536.157527,
+      "size": 361,
+      "httpOnly": true,
+      "secure": true,
+      "session": false,
+      "sameSite": "Lax",
+      "priority": "Medium",
+      "sourceScheme": "Secure"
+    }
+  ]
+}
