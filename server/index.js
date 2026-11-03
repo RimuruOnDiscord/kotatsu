@@ -122,6 +122,16 @@ if (fs.existsSync(distPath)) {
   });
 }
 
+// Keep-alive self-ping every 10 minutes to prevent Render free tier spin-down
+cron.schedule('*/10 * * * *', async () => {
+  const selfUrl = process.env.RENDER_EXTERNAL_URL || 'https://kotatsu-1-bhfh.onrender.com';
+  try {
+    await fetch(`${selfUrl.replace(/\/+$/, '')}/health`);
+  } catch {
+    // ignore
+  }
+});
+
 // Scheduled cookie refresh every 25 minutes
 cron.schedule('*/25 * * * *', async () => {
   console.log('[Nexus Server] ⏰ Scheduled cron triggered cookie refresh');
@@ -136,12 +146,12 @@ app.listen(PORT, '0.0.0.0', async () => {
   console.log(`🚀 Kotatsu Hybrid Server running on http://0.0.0.0:${PORT}`);
   console.log(`📡 Anime Nexus scraper active at /api/anime?q=<search>`);
   
-  // Background warmup check
+  // Background warmup check — force fresh cookies on Linux/container boot
   setTimeout(async () => {
     try {
-      await refreshCookies(false);
+      await refreshCookies(process.platform !== 'win32');
     } catch (e) {
       console.warn('[Nexus Server] Warmup notice:', e.message);
     }
-  }, 1000);
+  }, 1500);
 });

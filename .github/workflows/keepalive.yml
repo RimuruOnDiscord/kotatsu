@@ -1,0 +1,13 @@
+name: Keep Render Awake 24/7
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Render Health Endpoint
+        run: curl -fsSL --max-time 15 https://kotatsu-1-bhfh.onrender.com/health

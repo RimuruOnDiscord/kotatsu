@@ -1560,7 +1560,7 @@ export async function fetchAnivexaStreamFromProvider(
 
     try {
       const url = `${ANIVEXA_BASE}/watch/${provider}/${anilistId}/${audio}/${provider}-${episode}`;
-      const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
+      const res = await fetch(url, { signal: AbortSignal.timeout(15000) });
       if (!res.ok) return null;
       const data = await res.json();
       const streams = Array.isArray(data?.streams) ? data.streams : [];
@@ -1776,20 +1776,15 @@ export async function fetchFastestDirectStream(
 
   if (preferredProvider) {
     const cachedPref = readCachedStream(getStreamCacheKey(preferredProvider, anilistId, audio, episode));
-    if (cachedPref && cachedPref.type !== 'embed' && hasSubs(cachedPref)) return cachedPref;
+    if (cachedPref && cachedPref.type !== 'embed') return cachedPref;
   }
 
   const fastCached = readCachedStream(getStreamCacheKey('fast1080', anilistId, audio, episode));
   if (fastCached && fastCached.type !== 'embed' && hasSubs(fastCached)) return fastCached;
 
-  for (const p of FAST_1080P_PROVIDERS) {
-    const c = readCachedStream(getStreamCacheKey(p, anilistId, audio, episode));
-    if (c && c.type !== 'embed' && hasSubs(c)) return c;
-  }
-
   const candidates: AnivexaProviderId[] = preferredProvider
     ? [preferredProvider, ...FAST_1080P_PROVIDERS.filter((p) => p !== preferredProvider)]
-    : FAST_1080P_PROVIDERS;
+    : ['animegg', 'anikoto', 'nexus', 'kaa', 'aniwaves'];
 
   const requireValidDirect = async (p: AnivexaProviderId): Promise<StreamSource> => {
     const src = await fetchAnivexaStreamFromProvider(p, anilistId, audio, episode, title);
@@ -1800,38 +1795,7 @@ export async function fetchFastestDirectStream(
   };
 
   try {
-    // Launch all top 1080p candidates simultaneously
-    const softSubProviders = candidates.filter((p) => p === 'anikoto' || p === 'nexus');
-    const softSubPromise =
-      softSubProviders.length > 0
-        ? Promise.any(
-            softSubProviders.map(async (p) => {
-              const s = await requireValidDirect(p);
-              if (!s.subtitles || s.subtitles.length === 0) throw new Error('No subs');
-              return s;
-            })
-          )
-        : Promise.reject(new Error('No soft sub providers'));
-
-    const anyPromise = Promise.any(candidates.map((p) => requireValidDirect(p)));
-
-    // Give soft-subbed 1080p servers (anikoto / nexus) up to 2.2s to win cleanly,
-    // otherwise take whichever 1080p server finished first.
-    const winner = await Promise.race([
-      softSubPromise,
-      anyPromise.then(
-        (first) =>
-          new Promise<StreamSource>((resolve) => {
-            if (first.subtitles && first.subtitles.length > 0) {
-              resolve(first);
-              return;
-            }
-            setTimeout(() => resolve(first), 1800);
-          })
-      ),
-    ]).catch(() => anyPromise);
-
-    return winner;
+    return await Promise.any(candidates.map((p) => requireValidDirect(p)));
   } catch {
     return null;
   }

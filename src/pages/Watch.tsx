@@ -59,11 +59,11 @@ const QUALITY_OPTIONS = ['Auto', '1080p', '720p', '480p', '360p'];
 
 // Ordered by verified 1080p speed & reliability — the player races the top 1080p providers in parallel
 const DIRECT_PROVIDERS: { id: AnivexaProviderId; name: string; tag: string }[] = [
+  { id: 'animegg', name: 'AnimeGG', tag: 'Direct MP4' },
   { id: 'anikoto', name: 'AniKoto (1080p)', tag: 'Instant 1080p' },
   { id: 'nexus', name: 'AnimeNexus (1080p)', tag: 'Soft Subs + BD' },
   { id: 'kaa', name: 'KickAssAnime', tag: '1080p / 4K' },
   { id: 'aniwaves', name: 'AniWaves (HD)', tag: 'Fast Mirror' },
-  { id: 'animegg', name: 'AnimeGG', tag: 'Direct 1080p' },
   { id: 'animenosub', name: 'AnimeNoSub', tag: 'Sub & Dub' },
   { id: 'anipm', name: 'Ani.pm', tag: 'Direct HLS' },
   { id: 'senshi', name: 'Senshi (HD)', tag: 'Multi-Audio' },
@@ -1233,25 +1233,22 @@ export const Watch: React.FC = () => {
         const fallbackTitle = anime?.title || navState?.title || navState?.anime?.title;
 
         let source: StreamSource | null = null;
+        const provider = providersOrder[activeProviderIndex] || DIRECT_PROVIDERS[0].id;
 
-        if (activeProviderIndex === 0) {
-          // Race verified 1080p servers in parallel (or return prefetched cache in 0ms)
+        source = await fetchAnivexaStreamFromProvider(
+          provider,
+          animeId,
+          targetAudio,
+          episodeNum,
+          fallbackTitle
+        );
+
+        if (!source && activeProviderIndex === 0 && !cancelled) {
           source = await fetchFastestDirectStream(
             animeId,
             targetAudio,
             episodeNum,
             selectedProvider,
-            fallbackTitle
-          );
-        }
-
-        if (!source && !cancelled) {
-          const provider = providersOrder[activeProviderIndex] || DIRECT_PROVIDERS[0].id;
-          source = await fetchAnivexaStreamFromProvider(
-            provider,
-            animeId,
-            targetAudio,
-            episodeNum,
             fallbackTitle
           );
         }
@@ -1349,8 +1346,10 @@ export const Watch: React.FC = () => {
       hlsRef.current = null;
     }
 
-    if (activeSource.type === 'mp4') {
+    if (activeSource.type === 'mp4' || streamUrl.includes('.mp4')) {
+      video.removeAttribute('crossOrigin');
       video.src = streamUrl;
+      video.load();
       video.playbackRate = playbackSpeed;
       restoreSavedProgress(video, resumeTime);
       if (autoPlay) {
@@ -1358,6 +1357,8 @@ export const Watch: React.FC = () => {
       }
       return;
     }
+
+    video.crossOrigin = 'anonymous';
 
     if (Hls.isSupported()) {
       const hls = new Hls({
@@ -2438,6 +2439,16 @@ export const Watch: React.FC = () => {
             }
           }}
           onEnded={handleVideoEnded}
+          onError={() => {
+            if (hlsRef.current) return; // HLS.js handles its own fatal errors
+            currentAttachedStreamRef.current = '';
+            if (activeProviderIndex + 1 < providersOrder.length) {
+              setActiveProviderIndex((i) => i + 1);
+            } else {
+              setLoadingStream(false);
+              setStreamError(true);
+            }
+          }}
           onPlay={() => setPlaying(true)}
           onPause={(e) => {
             setPlaying(false);
