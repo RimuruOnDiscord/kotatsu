@@ -1770,6 +1770,7 @@ export const Watch: React.FC = () => {
     if (!sidebarSeasonAnilistId) return;
     if (String(sidebarSeasonAnilistId) === String(animeId) && episodes.length > 0) {
       setSidebarEpisodes(episodes);
+      setLoadingSidebarEpisodes(false);
       return;
     }
     let cancelled = false;
@@ -4795,7 +4796,7 @@ export const Watch: React.FC = () => {
                       touchYRef.current = null;
                     }}
                   >
-                    {loadingSidebarEpisodes
+                    {loadingSidebarEpisodes && sidebarEpisodes.length === 0
                       ? [-1, 0, 1].map((o) => (
                           <div
                             key={o}
