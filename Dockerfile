@@ -8,7 +8,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     fonts-liberation \
     && rm -rf /var/lib/apt/lists/*
 
-ENV NODE_ENV=production
 ENV PORT=7860
 ENV CHROME_PATH=/usr/bin/chromium
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
@@ -17,9 +16,9 @@ ENV HOME=/tmp
 
 WORKDIR /app
 
-# 1. Install root dependencies
+# 1. Install root dependencies (including devDependencies needed for `vite build`)
 COPY package.json package-lock.json* ./
-RUN npm install
+RUN npm install --include=dev
 
 # 2. Install anivexa-api sub-package dependencies (downloads Linux native wreq-js binding)
 COPY anivexa-api/package.json ./anivexa-api/
@@ -28,8 +27,9 @@ RUN npm --prefix anivexa-api install
 # 3. Copy project source files
 COPY . .
 
-# 4. Build Vite frontend into /app/dist
+# 4. Build Vite frontend into /app/dist, then set NODE_ENV=production for runtime
 RUN npm run build
+ENV NODE_ENV=production
 
 # 5. Ensure writable directories for Hugging Face's non-root container user (uid=1000)
 RUN mkdir -p /app/server/data/trailers /app/anivexa-api/core/.cache \
